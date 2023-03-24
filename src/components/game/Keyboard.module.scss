@@ -1,0 +1,13 @@
+.keyboard {
+    height: var(--keyboard-height);
+    margin: 0 8px;
+    user-select: none;
+  }
+  
+  .row {
+    display: flex;
+    width: 100%;
+    margin: 0 auto 8px;
+    touch-action: manipulation;
+  }
+  

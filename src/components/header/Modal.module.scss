@@ -1,0 +1,159 @@
+.modalOverlay {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 0;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--opacity-50);
+    z-index: var(--modal-z-index);
+  }
+  
+  .content {
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--color-tone-6);
+    background-color: var(--modal-content-bg);
+    color: var(--color-tone-1);
+    box-shadow: 0 4px 23px 0 rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-height: 100%;
+    overflow-y: auto;
+    animation: SlideIn 200ms;
+    max-width: var(--game-max-width);
+    padding: 16px;
+    box-sizing: border-box;
+  
+    &:focus {
+      outline: none;
+    }
+  
+    // XWD-18275
+    &.testExtraWidth {
+      max-width: 520px;
+    }
+  }
+  
+  .paddingTop {
+    padding-top: 30px;
+    height: calc(100% - 30px);
+  }
+  
+  .extraPadding {
+    padding: 32px;
+  }
+  
+  .content.closing {
+    animation: SlideOut 200ms;
+  }
+  
+  .closeIcon {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    user-select: none;
+    cursor: pointer;
+  
+    &:focus-visible {
+      outline: 2px solid var(--outline-focus);
+    }
+  }
+  
+  .heading {
+    font-family: 'nyt-franklin';
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 0px;
+    display: block;
+  }
+  
+  .newHeading {
+    font-family: 'nyt-karnakcondensed';
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0;
+    line-height: 30px;
+    text-transform: none;
+    text-align: left;
+    margin-bottom: 4px;
+    margin-top: 29px;
+    display: block;
+  }
+  
+  .flexContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  // can't use (max-width: var(--game-max-width)) here because media
+  // queries don't support css variables. if we end up having more cases
+  // like this we can use a scss variable.
+  @media (max-width: 500px) {
+    .modalOverlay {
+      align-items: flex-end;
+    }
+  
+    .content {
+      min-height: 70%;
+      width: 100%;
+  
+      // NSO-2385 - remove min height on mobile to remove extra space on bottom of modal
+      &.testNoMinHeight {
+        min-height: initial;
+      }
+    }
+    .content.shortStatsModal {
+      min-height: unset;
+      width: 100%;
+      padding-bottom: 20px;
+    }
+  
+    .paddingTop {
+      .content {
+        height: 100%;
+      }
+    }
+  }
+  
+  @keyframes SlideIn {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes SlideOut {
+    0% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+    90% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+  }
+  
+  .content.noPadding {
+    padding: 0;
+  }
+  

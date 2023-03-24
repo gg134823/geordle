@@ -1,0 +1,134 @@
+$pagePadding: 16px;
+
+.help {
+  width: 100%;
+  margin: auto;
+}
+
+.subheading {
+  font-family: 'nyt-karnak';
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  margin: 0;
+}
+
+.instructions {
+  font-family: 'nyt-franklin';
+  font-size: 16px;
+  line-height: 20px;
+  list-style-type: disc;
+  font-weight: 500;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding-inline-start: 20px;
+  color: var(--color-tone-1);
+
+  li {
+    margin-bottom: 4px;
+  }
+
+  li::marker {
+    font-size: 18px;
+  }
+}
+
+.examples {
+  font-family: 'nyt-franklin';
+
+  strong {
+    font-weight: bold;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.example {
+  margin-top: 8px;
+  margin-bottom: 20px;
+
+  p {
+    font-size: 16px;
+    line-height: 20px;
+    margin-top: 8px;
+  }
+}
+
+.tileContainer {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-right: 4px;
+}
+
+.page {
+  padding: $pagePadding;
+  padding-top: 0px;
+}
+
+.reminderSignUp {
+  font-family: 'nyt-franklin';
+  font-size: 16px;
+  line-height: 20px;
+  margin-top: 20px;
+
+  a {
+    color: var(--blue-2);
+  }
+}
+
+/*---auth---*/
+.statsLogin {
+  font-family: 'nyt-franklin';
+  position: relative;
+  color: var(--color-tone-1);
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+  padding: 17px 0;
+  border-top: 1px solid var(--gray-4);
+  border-bottom: 1px solid var(--gray-4);
+  margin: 0 auto 20px;
+
+  button {
+    border: none;
+    background-color: transparent;
+    font-family: 'nyt-franklin';
+    font-size: 16px;
+    line-height: 20px;
+    text-align: left;
+    padding: 0px 0px 3px;
+  }
+
+  a,
+  button {
+    color: var(--blue-2);
+  }
+
+  .loginArrow {
+    text-decoration: none;
+    justify-self: flex-end;
+  }
+
+  .loginText {
+    flex-grow: 2;
+  }
+
+  .statsIcon {
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 295px) {
+  .tileContainer {
+    height: 32px;
+  }
+}
