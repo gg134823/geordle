@@ -13,15 +13,15 @@ const BoardRow = (props) => {
     <div className={classList} role="group" aria-label="Row 1">
       {columns.map((col) => (
         <div
-          className={`${styles[props.context.winRow == props.row ? "win"+col : ""]}`}
-          animation-delay={`${col * 100}ms`}
+          className={`${styles[props.context.winRow == props.row ? "win" : ""]}`}
+          style={{animationDelay: `${col * 100}ms`}}
           key={"anni" + col}
         >
           <Tile
             letter={props.context.boardLetters[props.row][col]}
             state={props.context.boardStates[props.row][col]}
             animation={props.context.boardAnimation[props.row][col]}
-            ad={`${col * 100}ms`}
+            ad={`${col * 250}ms`}
             key={col}
           />
         </div>

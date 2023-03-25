@@ -11,7 +11,7 @@ const Tile = (props) => {
         aria-live="polite"
         data-animation={props.animation}
         data-testid="tile"
-        animation-delay={props.ad}
+        style={{animationDelay: `${props.ad}`}}
       >
         {props.letter}
       </div>

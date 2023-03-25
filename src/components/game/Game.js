@@ -325,7 +325,7 @@ const Game = (props) => {
                   );
                 }
               }
-              ctx.boardAnimation[ctx.currentRow][i] = "flip-out" + i;
+              ctx.boardAnimation[ctx.currentRow][i] = "flip-out";
             }
             if (ctx.winner) {
               bounceLetters(ctx, ctx.currentRow, 1200);
