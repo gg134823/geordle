@@ -12,7 +12,7 @@ const Game = (props) => {
   const statsVersion = "v1.00";
   const now = new Date();
   const dayOffset = Math.floor(now / 8.64e7) - 19430;
-  const wordOffset = (dayOffset*168)%5377;
+  const wordOffset = (dayOffset * 168) % 5377;
   const todaysWord = wordleWords[wordOffset];
 
   const [ctxState, setCtxState] = useState(true);
@@ -146,19 +146,29 @@ const Game = (props) => {
     setStats(stats);
   };
 
+  const displayWordForLosers = (ctx) => {
+    if (ctx.currentRow > 5 && !ctx.winner) {
+      setError(todaysWord);
+      setTimeout(() => {
+        setError(null);
+      }, 3500);
+    }
+  };
+
   const updateContextHandler = (newContext, action) => {
     // check a couple of things before updating the state
     if (action === "STORE_STATE") {
       if (newContext.gameOver) {
+        //only store stats at the end of game (once)
         // set statistics and save
         calcStats(stats, newContext);
         localStorage.setItem("geordleStats", JSON.stringify(stats));
         // clear the GameOver flag
         newContext.gameOver = false;
       }
+      displayWordForLosers(newContext);
       localStorage.setItem("geordleGame", JSON.stringify(newContext));
-    }
-    if (action === "INVALID_WORD") {
+    } else if (action === "INVALID_WORD") {
       setError("Not in word list");
       setTimeout(() => {
         setError(null);
@@ -181,6 +191,7 @@ const Game = (props) => {
     if (storedGame && dayOffset === storedGame.dayOffset) {
       // we have a saved state for today
       setBoardContext(storedGame);
+      displayWordForLosers(storedGame);
     } else {
       localStorage.removeItem("geordleGame");
       boardContext.dayOffset = dayOffset;
@@ -218,6 +229,7 @@ const Game = (props) => {
       updateContextHandler(ctx);
     }, delay);
     setTimeout(() => {
+      // after rattling, clear flag and put up invalid word dialog
       ctx.rowInvalid[row] = false;
       updateContextHandler(ctx, "INVALID_WORD");
     }, +delay + 600);
@@ -246,14 +258,11 @@ const Game = (props) => {
     event.preventDefault();
     const ctx = boardContext;
     if (ctx.currentRow < 6 && !ctx.winner) {
-      //   const eventTargetID = event.target.id ? event.target.id : "bs"; // in case they clicked the svg
       if (event.target.id === "enter") {
         if (ctx.currentCol === 5) {
           let curGuess = ctx.boardLetters[ctx.currentRow].join("");
-          // console.log("current guess = " + curGuess);
           // check to see if it is a valid word
           if (wordleWords.includes(curGuess)) {
-            // console.log("time to check word against " + todaysWord);
             if (!curGuess.localeCompare(todaysWord)) {
               // winner
               ctx.winner = true;
@@ -277,25 +286,28 @@ const Game = (props) => {
                   "correct"
                 );
                 temFoundLetter[workingGuess[i]] = "correct";
-                todayLetters[i] = "";
+                todayLetters[i] = ""; // nulled out so this is skipped in next check
                 workingGuess[i] = "";
               }
             }
             for (let i = 0; i < 5; i++) {
               if (workingGuess[i]) {
+                // skip letters that are in right place
                 let ind = todayLetters.findIndex((x) => x === workingGuess[i]);
-
                 if (ind >= 0) {
+                  // letter is found in word but in wrong place
+                  temFoundLetter[workingGuess[i]] =
+                    temFoundLetter[workingGuess[i]] != "correct" &&
+                    ctx.keyStates[workingGuess[i]] != "correct"
+                      ? "present"
+                      : "correct";
                   setRowState(
                     ctx,
                     ctx.currentRow,
                     i,
                     workingGuess[i],
                     "present",
-                    temFoundLetter[workingGuess[i]] != "correct" &&
-                      ctx.keyStates[workingGuess[i]] != "correct"
-                      ? "present"
-                      : "correct"
+                    temFoundLetter[workingGuess[i]]
                   );
                   todayLetters[ind] = "";
                 } else {
@@ -306,7 +318,9 @@ const Game = (props) => {
                     workingGuess[i],
                     "absent",
                     temFoundLetter[workingGuess[i]] != "correct"
-                      ? "absent"
+                      ? temFoundLetter[workingGuess[i]] != "present"
+                        ? "absent"
+                        : "present"
                       : "correct"
                   );
                 }
@@ -327,7 +341,6 @@ const Game = (props) => {
           } else {
             // not a valid word - Just shake the word and display a message
             rattleRow(ctx, ctx.currentRow, 0);
-            //  TBD display modal for a few seconds
           }
         }
       } else if (event.target.id === "bs") {
