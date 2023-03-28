@@ -11,7 +11,9 @@ import wordleWords from "./wordleWords";
 const Game = (props) => {
   const statsVersion = "v1.00";
   const now = new Date();
-  const dayOffset = Math.floor(now / 8.64e7) - 19430;
+  let timeInhours = now / 3600000 - 4; // New word at midnight GMT - 4
+  const dayOffset = Math.floor(timeInhours / 24) - 19430;
+
   const wordOffset = (dayOffset * 168) % 5377;
   const todaysWord = wordleWords[wordOffset];
 
@@ -155,7 +157,14 @@ const Game = (props) => {
     }
   };
 
-  const updateContextHandler = (newContext, action) => {
+  // ---------------------------------------------------------------------------
+  // On startup, check for a stored game in progress and also check for
+  // stored statistics.
+  // This should only run once. (note: it runs twice in dev because React.StrictMode
+  // is set but that does not matter)
+  // ---------------------------------------------------------------------------
+
+  const updateContext = (newContext, action) => {
     // check a couple of things before updating the state
     if (action === "STORE_STATE") {
       if (newContext.gameOver) {
@@ -186,6 +195,13 @@ const Game = (props) => {
     });
   };
 
+  // ---------------------------------------------------------------------------
+  // On startup, check for a stored game in progress and also check for
+  // stored statistics.
+  // This should only run once. (note: it runs twice in dev because React.StrictMode
+  // is set but that does not matter)
+  // ---------------------------------------------------------------------------
+
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem("geordleGame"));
     if (storedGame && dayOffset === storedGame.dayOffset) {
@@ -199,7 +215,6 @@ const Game = (props) => {
     }
 
     const storedStats = JSON.parse(localStorage.getItem("geordleStats"));
-
     if (storedStats && statsVersion == storedStats.version) {
       // we have good stats
       // note: at this point the stats were saved on a previous day so
@@ -222,140 +237,184 @@ const Game = (props) => {
   }, []);
 
   // ---------------------------------------------------------------------------
+  // rattleRow()
+  // when an invalid word is entered, shake the letters by setting a the
+  // invalid flag for the row to true (after a delay to wait for the letters
+  // to finish flipping). Also, set a timer to clear the invalid flag and
+  // display a dialog after the shake is finished.
+  // ---------------------------------------------------------------------------
 
   const rattleRow = (ctx, row, delay) => {
     setTimeout(() => {
       ctx.rowInvalid[row] = true;
-      updateContextHandler(ctx);
+      updateContext(ctx);
     }, delay);
     setTimeout(() => {
       // after rattling, clear flag and put up invalid word dialog
       ctx.rowInvalid[row] = false;
-      updateContextHandler(ctx, "INVALID_WORD");
+      updateContext(ctx, "INVALID_WORD");
     }, +delay + 600);
   };
+
+  // ---------------------------------------------------------------------------
+  // bounceLetters()
+  // on win,  set a timer to bounce the letters after a delay to wait
+  // for the letters to all flip. Also set a timer to then clear the
+  // winning state and display a winning dialog
+  // ---------------------------------------------------------------------------
 
   const bounceLetters = (ctx, row, delay) => {
     setTimeout(() => {
       ctx.winRow = row;
-      updateContextHandler(ctx);
+      updateContext(ctx);
     }, delay);
     setTimeout(() => {
       ctx.winRow = -1;
-      updateContextHandler(ctx, "WINNER");
+      updateContext(ctx, "WINNER");
     }, +delay + 1200);
   };
 
-  const setRowState = (ctx, row, col, ltr, bstate, lstate) => {
+  // ---------------------------------------------------------------------------
+  // setLetterState()
+  // When changing the state of a row letters, delay the update of each letter
+  // based on the column number so that the new state is not reflected before
+  // the flip completes.
+  // ---------------------------------------------------------------------------
+
+  const setLetterState = (ctx, row, col, ltr, bstate, lstate) => {
     setTimeout(() => {
       ctx.boardStates[row][col] = bstate;
       ctx.keyStates[ltr] = lstate;
-      updateContextHandler(ctx);
+      updateContext(ctx);
     }, col * 250 + 300);
   };
 
-  const ClickHandler = (event) => {
-    event.preventDefault();
-    const ctx = boardContext;
-    if (ctx.currentRow < 6 && !ctx.winner) {
-      if (event.target.id === "enter") {
-        if (ctx.currentCol === 5) {
-          let curGuess = ctx.boardLetters[ctx.currentRow].join("");
-          // check to see if it is a valid word
-          if (wordleWords.includes(curGuess)) {
-            if (!curGuess.localeCompare(todaysWord)) {
-              // winner
-              ctx.winner = true;
-              ctx.gameOver = true;
-            }
-            let temFoundLetter = {
-              a: null,
-            };
-            // figure out letter states
-            let todayLetters = todaysWord.split("");
-            let workingGuess = curGuess.split("");
-            for (let i = 0; i < 5; i++) {
-              if (todayLetters[i] === workingGuess[i]) {
-                // right letter in right position
-                setRowState(
-                  ctx,
-                  ctx.currentRow,
-                  i,
-                  workingGuess[i],
-                  "correct",
-                  "correct"
-                );
-                temFoundLetter[workingGuess[i]] = "correct";
-                todayLetters[i] = ""; // nulled out so this is skipped in next check
-                workingGuess[i] = "";
-              }
-            }
-            for (let i = 0; i < 5; i++) {
-              if (workingGuess[i]) {
-                // skip letters that are in right place
-                let ind = todayLetters.findIndex((x) => x === workingGuess[i]);
-                if (ind >= 0) {
-                  // letter is found in word but in wrong place
-                  temFoundLetter[workingGuess[i]] =
-                    temFoundLetter[workingGuess[i]] != "correct" &&
-                    ctx.keyStates[workingGuess[i]] != "correct"
-                      ? "present"
-                      : "correct";
-                  setRowState(
-                    ctx,
-                    ctx.currentRow,
-                    i,
-                    workingGuess[i],
-                    "present",
-                    temFoundLetter[workingGuess[i]]
-                  );
-                  todayLetters[ind] = "";
-                } else {
-                  setRowState(
-                    ctx,
-                    ctx.currentRow,
-                    i,
-                    workingGuess[i],
-                    "absent",
-                    temFoundLetter[workingGuess[i]] != "correct"
-                      ? temFoundLetter[workingGuess[i]] != "present"
-                        ? "absent"
-                        : "present"
-                      : "correct"
-                  );
-                }
-              }
-              ctx.boardAnimation[ctx.currentRow][i] = "flip-out";
-            }
-            if (ctx.winner) {
-              bounceLetters(ctx, ctx.currentRow, 1200);
-            }
-            ctx.currentCol = 0;
-            ctx.currentRow++;
-            if (ctx.currentRow == 6) {
-              ctx.gameOver = true;
-            }
-            setTimeout(() => {
-              updateContextHandler(ctx, "STORE_STATE");
-            }, 1500);
-          } else {
-            // not a valid word - Just shake the word and display a message
-            rattleRow(ctx, ctx.currentRow, 0);
+  const processEnterKey = (ctx) => {
+    if (ctx.currentCol === 5) {
+      let curGuess = ctx.boardLetters[ctx.currentRow].join("");
+      // check to see if it is a valid word
+      if (!wordleWords.includes(curGuess)) {
+        // not a valid word - Just shake the word and display a message
+        rattleRow(ctx, ctx.currentRow, 0);
+      } else {
+        if (!curGuess.localeCompare(todaysWord)) {
+          // winner
+          ctx.winner = true;
+          ctx.gameOver = true;
+        }
+        let temKeyStates = {
+          a: null,
+        };
+        // figure out letter states
+        let todaysLetters = todaysWord.split("");
+        let workingGuess = curGuess.split("");
+        for (let i = 0; i < 5; i++) {
+          if (todaysLetters[i] === workingGuess[i]) {
+            // right letter in right position
+            setLetterState(
+              ctx,
+              ctx.currentRow,
+              i,
+              workingGuess[i],
+              "correct",
+              "correct"
+            );
+            temKeyStates[workingGuess[i]] = "correct";
+            todaysLetters[i] = ""; // nulled out so this is skipped in next check
+            workingGuess[i] = "";
           }
         }
-      } else if (event.target.id === "bs") {
+        for (let i = 0; i < 5; i++) {
+          if (workingGuess[i]) {
+            // skip letters that are in right place
+            let ind = todaysLetters.findIndex((x) => x === workingGuess[i]);
+            if (ind >= 0) {
+              // letter is found in word but in wrong place
+              temKeyStates[workingGuess[i]] =
+                temKeyStates[workingGuess[i]] != "correct" &&
+                ctx.keyStates[workingGuess[i]] != "correct"
+                  ? "present"
+                  : "correct";
+              setLetterState(
+                ctx,
+                ctx.currentRow,
+                i,
+                workingGuess[i],
+                "present",
+                temKeyStates[workingGuess[i]]
+              );
+              todaysLetters[ind] = "";
+            } else {
+              setLetterState(
+                ctx,
+                ctx.currentRow,
+                i,
+                workingGuess[i],
+                "absent",
+                temKeyStates[workingGuess[i]] != "correct"
+                  ? temKeyStates[workingGuess[i]] != "present"
+                    ? "absent"
+                    : "present"
+                  : "correct"
+              );
+            }
+          }
+          ctx.boardAnimation[ctx.currentRow][i] = "flip-out";
+          if (ctx.currentRow > 0 && ctx.currentRow < 5) {
+            ctx.boardAnimation[ctx.currentRow - 1][i] = "idle";
+          }
+        }
+        if (ctx.winner) {
+          bounceLetters(ctx, ctx.currentRow, 1200);
+        }
+        ctx.currentCol = 0;
+        ctx.currentRow++;
+        if (ctx.currentRow == 6) {
+          ctx.gameOver = true;
+        }
+        setTimeout(() => {
+          updateContext(ctx, "STORE_STATE");
+        }, 1500);
+      }
+    }
+  };
+
+  // Process clicks on the app keyboard
+  const ClickHandler = (event) => {
+    event.preventDefault();
+    processKey(event.target.id);
+  };
+
+  // Process key presses on the keyboard of the device
+  const KeyDownHandler = (event) => {
+    event.preventDefault();
+    const validLetters = "qwertyuiopasdfghjklzxcvbnm".split("");
+    validLetters.push("Entry", "Backspace");
+    if (validLetters.includes(event.key)) {
+      processKey(event.key);
+    }
+  };
+
+  // process the keyed input from either source
+  const processKey = (keyCode) => {
+    console.log(keyCode);
+    const ctx = boardContext;
+    if (ctx.currentRow < 6 && !ctx.winner) {
+      if (keyCode === "Enter") {
+        processEnterKey(ctx);
+      } else if (keyCode === "Backspace") {
         if (ctx.currentCol > 0) {
           ctx.currentCol--;
           ctx.boardLetters[ctx.currentRow][ctx.currentCol] = "";
           ctx.boardStates[ctx.currentRow][ctx.currentCol] = "empty";
-          updateContextHandler(ctx);
+          updateContext(ctx);
         }
       } else {
         if (ctx.currentCol < 5) {
-          ctx.boardLetters[ctx.currentRow][ctx.currentCol] = event.target.id;
+          ctx.boardLetters[ctx.currentRow][ctx.currentCol] = keyCode;
           ctx.boardStates[ctx.currentRow][ctx.currentCol] = "tbd";
           ctx.currentCol++;
-          updateContextHandler(ctx);
+          updateContext(ctx);
         }
       }
     }
@@ -365,10 +424,10 @@ const Game = (props) => {
     <>
       {DispHelp && <HelpModal onConfirm={closeModal} />}
       {DispStats && <StatsModal stats={stats} onConfirm={closeModal} />}
-      <div className={styles.game}>
+      <div className={styles.game} tabIndex={-1} onKeyDown={KeyDownHandler}>
         <Header onDisplayModal={modalHandler} />
         {error && <ErrorModal message={error} />}
-        <Board context={boardContext} />
+        <Board context={boardContext} onKeyDown={ClickHandler} />
         <KeyBoard context={boardContext} onUpdate={ClickHandler} />
       </div>
     </>
