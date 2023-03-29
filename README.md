@@ -1,6 +1,6 @@
 # Geordle - a word game created using React.js as an exercise
 
-If you want to play around with it (and you have React installed using npm)
+If you want to play around with the React code (and you have React installed using npm)
 
 1. Download it
 
@@ -10,8 +10,9 @@ If you want to play around with it (and you have React installed using npm)
 
 4. Run `npm start` to start the development server.
 
+To see the running application visit geofgiesler.com/geordle
 
-Here is some more information with respect to [Create React App]:
+# Here is some more information with respect to [Create React App]:
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
