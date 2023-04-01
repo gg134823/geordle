@@ -1,8 +1,6 @@
 @import './reset.scss';
 
 
-
-
 /* Global Styles & Colors */
 :root {
   --green: #6aaa64;
@@ -41,45 +39,7 @@
   --system-toast-z-index: 4000;
   --horizontal-warning-z-index: 5000;
 
-  // icons
-  // Note: Because these urls are stored as CSS variables, the /public path that
-  // we typically use for assets isn't transformed correctly in our build process
-  // to point to our CDN. Until we refactor this code we'll hit the asset bucket
-  // directly, even in local development.
-  --spelling-bee: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized.svg');
-  --daily: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized.svg');
-  --mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Mini-Icon-Normalized.svg');
-  --tiles: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Tiles-Icon-Normalized.svg');
-  --sudoku: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized.svg');
-  --vertex: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Vertex-Icon-Normalized.svg');
-  --letter-boxed: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/LetterBoxed-Icon-Normalized.svg');
-  --nyt: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/NYT-Icon-Normalized.svg');
-  --wirecutter: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Wirecutter-Icon-Normalized.svg');
-  --cooking: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Cooking-Icon-Normalized.svg');
-  --athletic: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Athletic-Icon-Normalized.svg');
-  --stats-auth: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/stats-auth-cta.svg');
-  --wordlebot: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/WordleBot-Icon-Normalized.svg');
-  --wordlebot-walking-icon: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/WordleBot-Walking-Icon-Normalized.svg');
-  --wordle-icon: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/wordle-icon.svg');
-
-  --gameslogo: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/gameslogo.svg');
-  --stats-problem: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/transparent-wordle-issue.svg');
-  --link-info: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/transparent-wordle-link.svg');
-  --badge-confirm: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-badge-confirm.svg');
-  --badge-fail: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-badge-fail.svg');
-  --large-stats: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-large-stats.svg');
-  --wordle-sb-mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-mini-sb.svg');
-  --wordle-share-mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-mini-share.svg');
-  --wordle-stats-confirm-mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-mini-stats-confirm.svg');
-  --wordle-stats-loaded-mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-mini-stats-loaded.svg');
-  --wordle-stats-mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-mini-stats.svg');
-  --wordle-stats-mini-check: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-mini-stats-check.svg');
-  --wordlebot-walking: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/WordleBot-walking.svg');
-  --nyt-logo: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/nyt-logo.svg');
-  --hybrid-back: url('https://www.nytimes.com/games-assets/v2/assets/hybrid-back-light-mode.svg');
-  --hybrid-back-dark-mode: url('https://www.nytimes.com/games-assets/v2/assets/hybrid-back-dark-mode.svg');
-  --icon-rotate-wordle: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/icon-rotate-wordle.svg');
-
+  
   /* sb-promo */
   --promo-icon-height: 40px;
   --promo-icon-width: 40px;
@@ -89,8 +49,6 @@
   --svg-arrow-fill-hover: black;
   --svg-arrow-stroke-hover: white;
 
-  /* auth sb-promo */
-  --spelling-bee-promo: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized.svg');
 }
 
 /* Light theme colors */
@@ -132,24 +90,7 @@
   --error-background: var(--color-tone-7);
   --icon-disabled: #59595a;
 
-  // dark mode icons
-  --spelling-bee: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized-Color.svg');
-  --daily: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg');
-  --mini: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Mini-Icon-Normalized-Color.svg');
-  --tiles: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Tiles-Icon-Normalized-Color.svg');
-  --sudoku: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized-Color.svg');
-  --vertex: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Vertex-Icon-Normalized-Color.svg');
-  --letter-boxed: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/LetterBoxed-Icon-Normalized-Color.svg');
-  --nyt: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/NYT-Icon-Normalized-Color.svg');
-  --athletic: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Athletic-Icon-Normalized-Color.svg');
-  --stats-auth: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/stats-auth-cta.svg');
-  --wordlebot: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/WordleBot-Icon-Normalized-Color.svg');
-  --wordlebot-walking-icon: url('https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/WordleBot-Walking-Icon-Color.svg');
-  --stats-problem: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/transparent-wordle-issue.svg');
-  --link-info: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/dark-mode-wordle-link.svg');
-  --gameslogo: url('https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/whitegameslogo.svg');
-
-  /* dark mode sb-promo */
+    /* dark mode sb-promo */
   --promo-icon-height: 27px;
   --promo-icon-width: 27px;
   --promo-icon-bg-size: 35px;
