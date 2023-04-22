@@ -1,5 +1,33 @@
 @import './reset.scss';
 
+@font-face {
+  font-family: 'karnakpro-black';
+  src: url('components/fonts/karnakpro-black-webfont.woff2') format('woff2'),
+       url('components/fonts/karnakpro-black-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'karnakproblack-condensed';
+  src: url('components/fonts/karnakpro-condensedblack-webfont.woff2') format('woff2'),
+       url('components/fonts/karnakpro-condensedblack-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'karnakpro';
+  src: url('components/fonts/karnakpro-medium-webfont.woff2') format('woff2'),
+       url('components/fonts/karnakpro-medium-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'karnakpro-condensed';
+  src: url('components/fonts/karnakproobelisk-medium-webfont.woff2') format('woff2'),
+       url('components/fonts/karnakproobelisk-medium-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* Global Styles & Colors */
 :root {

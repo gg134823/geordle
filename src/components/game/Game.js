@@ -14,7 +14,7 @@ const Game = (props) => {
   let timeInhours = now / 3600000 - 4; // New word at midnight GMT - 4
   const dayOffset = Math.floor(timeInhours / 24) - 19430;
 
-  const wordOffset = (dayOffset * 168) % 5377;
+  const wordOffset = (dayOffset * 168) % 5209;
   const todaysWord = wordleWords[wordOffset];
 
   const [ctxState, setCtxState] = useState(true);
@@ -181,7 +181,7 @@ const Game = (props) => {
       setError("Not in word list");
       setTimeout(() => {
         setError(null);
-      }, 2000);
+      }, 1000);
     } else if (action === "WINNER") {
       setError(winningQuotes[newContext.currentRow - 1]);
       setTimeout(() => {
@@ -203,6 +203,8 @@ const Game = (props) => {
   // ---------------------------------------------------------------------------
 
   useEffect(() => {
+
+    // check for stored game in progres:
     const storedGame = JSON.parse(localStorage.getItem("geordleGame"));
     if (storedGame && dayOffset === storedGame.dayOffset) {
       // we have a saved state for today
@@ -214,6 +216,7 @@ const Game = (props) => {
       setBoardContext(boardContext);
     }
 
+    // check for stored stats:
     const storedStats = JSON.parse(localStorage.getItem("geordleStats"));
     if (storedStats && statsVersion == storedStats.version) {
       // we have good stats
