@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Tile from "./Tile";
 import styles from "./BoardRow.module.scss";
 //import BoardContext from "../../store/board-context";
@@ -13,7 +13,7 @@ const BoardRow = (props) => {
     <div className={classList} role="group" aria-label="Row 1">
       {columns.map((col) => (
         <div
-          className={`${styles[props.context.winRow == props.row ? "win" : ""]}`}
+          className={`${styles[props.context.winRow === props.row ? "win" : ""]}`}
           style={{animationDelay: `${col * 100}ms`}}
           key={"anni" + col}
         >

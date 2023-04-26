@@ -11,7 +11,7 @@ const KeyRow = (props) => {
 
   return (
     <>
-      {props.rowNum == 1 && <div className={styles.half} />}
+      {props.rowNum === "1" && <div className={styles.half} />}
       {rows[props.rowNum].map((letter) => (
         <button
           className={`${styles.key} 
@@ -23,10 +23,10 @@ const KeyRow = (props) => {
           key={letter}
           onClick={props.onUpdate}
         >
-          {letter != "Backspace" ? letter : <BackSpaceIcon />}
+          {letter !== "Backspace" ? letter : <BackSpaceIcon />}
         </button>
       ))}
-      {props.rowNum == 1 && <div className={styles.half} />}
+      {props.rowNum === "1" && <div className={styles.half} />}
     </>
   );
 };
