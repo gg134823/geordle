@@ -218,7 +218,7 @@ const Game = (props) => {
 
     // check for stored stats:
     const storedStats = JSON.parse(localStorage.getItem("geordleStats"));
-    if (storedStats && statsVersion == storedStats.version) {
+    if (storedStats && statsVersion === storedStats.version) {
       // we have good stats
       // note: at this point the stats were saved on a previous day so
       //       storedStats.dayOffset will always be at least one day older than
@@ -334,8 +334,8 @@ const Game = (props) => {
             if (ind >= 0) {
               // letter is found in word but in wrong place
               temKeyStates[workingGuess[i]] =
-                temKeyStates[workingGuess[i]] != "correct" &&
-                ctx.keyStates[workingGuess[i]] != "correct"
+                temKeyStates[workingGuess[i]] !== "correct" &&
+                ctx.keyStates[workingGuess[i]] !== "correct"
                   ? "present"
                   : "correct";
               setLetterState(
@@ -354,8 +354,8 @@ const Game = (props) => {
                 i,
                 workingGuess[i],
                 "absent",
-                temKeyStates[workingGuess[i]] != "correct"
-                  ? temKeyStates[workingGuess[i]] != "present"
+                temKeyStates[workingGuess[i]] !== "correct"
+                  ? temKeyStates[workingGuess[i]] !== "present"
                     ? "absent"
                     : "present"
                   : "correct"
@@ -372,7 +372,7 @@ const Game = (props) => {
         }
         ctx.currentCol = 0;
         ctx.currentRow++;
-        if (ctx.currentRow == 6) {
+        if (ctx.currentRow === 6) {
           ctx.gameOver = true;
         }
         setTimeout(() => {
